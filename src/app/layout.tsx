@@ -12,18 +12,9 @@ type RootLayoutProps = {
 
 export default function RootLayout({children}: Readonly<RootLayoutProps>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className="dark">
       <body>
-
-        <header>
-          <h1>The blog</h1>
-        </header>
-
         {children}
-
-        <footer>
-          <p>© 2024 The blog. All rights reserved.</p>
-        </footer>
       </body>
     </html>
   );
