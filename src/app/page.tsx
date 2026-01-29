@@ -9,9 +9,10 @@ export default async function Home() {
 
   return (
     <Container>
-      <header>
+      {/* <header>
         <h1 className="text-6xl font-bold text-center py-8">Aqui é a header</h1>
-      </header>
+      </header> */}
+      <Header />
 
       <Suspense fallback={<SpinLoader />}>
         <PostsList />
