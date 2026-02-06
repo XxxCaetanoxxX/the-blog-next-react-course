@@ -7,11 +7,8 @@ export default async function Home() {
 
   return (
     <>
-      <Suspense fallback={<SpinLoader />}>
+      <Suspense fallback={<SpinLoader className="min-h-20 mb-16" />}>
         <PostFeatured />
-      </Suspense>
-
-      <Suspense fallback={<SpinLoader />}>
         <PostsList />
       </Suspense>
     </>
