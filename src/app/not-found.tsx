@@ -1,13 +1,11 @@
+import ErrorMessage from "@/components/ErrorMessage";
+
 export default function NotFoundPage() {
     return (
-        <>
-        <title>404 - Página não encontrada</title>
-        <div className="min-h-[320px] bg-slate-900 text-slate-100 mb-16 p-8 rounded-xl flex items-center justify-center text-center">
-            <div>
-                <h1 className="text-7xl/tight mb-4 font-extrabold">404</h1>
-                <p>Desculpe, a página que você está procurando não existe.</p>
-            </div>
-        </div></>
-        
+        <ErrorMessage
+            pageTitle="Página não encontrada"
+            contentTitle="404"
+            content="Desculpe, a página que você está procurando não existe."
+        />
     )
 }
