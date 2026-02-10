@@ -8,9 +8,9 @@ type ErrorProps = {
 }
 
 export default function RootErrorPage({ error, reset }: ErrorProps) {
-    // useEffect(() => {
-    //     console.log(error);
-    // }, [error])
+    useEffect(() => {
+        console.log(error);
+    }, [error])
 
     return (
         <ErrorMessage
