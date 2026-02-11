@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.6.2",
     "date-fns": "^4.1.0",
+    "drizzle-kit": "^0.31.9",
     "drizzle-orm": "^0.45.1",
     "next": "15.3.0",
     "react": "^19.0.0",
@@ -29,6 +31,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
