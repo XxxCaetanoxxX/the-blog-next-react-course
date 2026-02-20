@@ -52,7 +52,7 @@ export class DrizzlePostRepository implements PostRepository {
 
         await asyncDelay(SIMULATE_WAIT_IN_MS, true);
 
-        const post = await drizzleDb.query.posts.findMany({
+        const post = await drizzleDb.query.posts.findFirst({
             where: (posts, { eq }) => eq(posts.id, id),
         });
 
@@ -60,8 +60,9 @@ export class DrizzlePostRepository implements PostRepository {
             throw new Error('Post not found for id');
         }
 
-        return posts;
+        return post;
     }
+
 }
 
 (async () => {
