@@ -1,8 +1,9 @@
+import ErrorMessage from "@/components/ErrorMessage";
 import { findAllPostAdmin } from "@/lib/post/queries/admin";
 import { Metadata } from "next";
 import Link from "next/link";
-import { DeletePostButton } from "../admin/DeletePostButton";
-import ErrorMessage from "../ErrorMessage";
+import { DeletePostButton } from "../DeletePostButton";
+
 
 export const dynamic = 'force-dynamic';
 
@@ -30,11 +31,6 @@ export default async function PostsListAdmin() {
                         {!post.published && <span className="text-xs text-slate-600 italic">Não publicado</span>}
 
                         <DeletePostButton id={post.id} title={post.title} />
-
-                        {/* <form action={deletePostAction}>
-                            <input type="hidden" name="id" defaultValue={post.id}/>
-                            
-                        </form> */}
                     </div>
                 )
             })}
