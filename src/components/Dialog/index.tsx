@@ -14,9 +14,9 @@ export function Dialog({ isVisible = false, title, content, onConfirm, onCancel,
     if (!isVisible) return null;
 
     function handleCancel() {
-        if (!disabled) return
-
-        onCancel();
+        if (!disabled) {
+            onCancel();
+        }
     }
 
     return (
