@@ -1,4 +1,7 @@
 'use client';
+
+import { Button } from "../Button";
+
 type DialogProps = {
     isVisible?: boolean;
     title: string;
@@ -34,7 +37,24 @@ export function Dialog({ isVisible = false, title, content, onConfirm, onCancel,
 
                 <div className="flex items-center justify-around">
 
-                    <button
+                    <Button
+                        variant="ghost"
+                        autoFocus
+                        onClick={handleCancel}
+                        disabled={disabled}
+                    >
+                        Cancelar
+                    </Button>
+
+                    <Button
+                        variant="default"
+                        onClick={onConfirm}
+                        disabled={disabled}
+                    >
+                        Ok
+                    </Button>
+
+                    {/* <button
                         autoFocus
                         onClick={handleCancel}
                         disabled={disabled}
@@ -47,7 +67,7 @@ export function Dialog({ isVisible = false, title, content, onConfirm, onCancel,
                         disabled={disabled}
                         className="bg-blue-500 text-blue-50 hover:bg-blue-600 transition flex items-center justify-center py-2 px-4 rounded-lg cursor-pointer disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed">
                         Ok
-                    </button>
+                    </button> */}
 
                 </div>
 
