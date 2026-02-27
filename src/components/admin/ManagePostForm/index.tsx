@@ -3,8 +3,12 @@
 import { Button } from "@/components/Button";
 import { InputCheckBox } from "@/components/InputCheckBox";
 import { InputText } from "@/components/InputText";
+import { MarkdownEditor } from "@/components/MarkdownEditor";
+import { useState } from "react";
 
 export function ManagePostForm() {
+    const [contentValue, setContentValue] = useState('');
+
     return (
         <form action='' className="mb-16">
             <div>
@@ -45,6 +49,13 @@ export function ManagePostForm() {
                 <InputText labelText="sobrenome" placeholder="Digite seu sobrenome" />
 
                 <InputCheckBox labelText="sobrenome" />
+
+                <MarkdownEditor 
+                value={contentValue} 
+                setValue={setContentValue}
+                labelText="Conteudo" 
+                disabled={false} 
+                textAreaName="content" />
 
                 <InputText defaultValue='ola mundo' labelText="sobrenome" placeholder="Digite seu sobrenome" disabled />
                 <InputText labelText="sobrenome" placeholder="Digite seu sobrenome" disabled />
