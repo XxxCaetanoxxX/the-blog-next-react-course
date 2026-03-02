@@ -5,6 +5,7 @@ import { InputCheckBox } from "@/components/InputCheckBox";
 import { InputText } from "@/components/InputText";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 import { useState } from "react";
+import { ImageUploader } from "../ImageUploader";
 
 export function ManagePostForm() {
     const [contentValue, setContentValue] = useState('');
@@ -47,6 +48,8 @@ export function ManagePostForm() {
 
                 <InputText labelText="Nome" placeholder="Digite seu nome" />
                 <InputText labelText="sobrenome" placeholder="Digite seu sobrenome" />
+
+                <ImageUploader />
 
                 <InputCheckBox labelText="sobrenome" />
 
