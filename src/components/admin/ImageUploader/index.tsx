@@ -34,7 +34,7 @@ export function ImageUploader() {
         }
 
         const formData = new FormData();
-        // formData.append('file', file);
+        formData.append('file', file);
 
         startTransition(async () => {
             const result = await uploadImageAction(formData);
