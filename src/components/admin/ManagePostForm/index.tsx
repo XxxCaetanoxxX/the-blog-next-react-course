@@ -13,56 +13,105 @@ export function ManagePostForm() {
     return (
         <form action='' className="mb-16">
             <div>
-                {/* <div className="py-16 flex gap-4 flex-wrap items-center">
-                        <Button variant='default' size="sm">
-                            <BugIcon />
-                            Confirma
-                        </Button>
-                        <Button variant='ghost' size="md">
-                            <BugIcon />
-                            Confirma
-                        </Button>
-                        <Button variant='danger' size="lg">
-                            <BugIcon />
-                            Confirma
-                        </Button>
-                    </div>
-        
-                    <div className="py-16 flex gap-4 flex-wrap items-center">
-        
-                        <Button variant='default' size="sm" disabled>
-                            <BugIcon />
-                            Confirma
-                        </Button>
-        
-                        <Button variant='ghost' size="md" disabled>
-                            <BugIcon />
-                            Confirma
-                        </Button>
-        
-                        <Button variant='danger' size="lg" disabled>
-                            <BugIcon />
-                            Confirma
-                        </Button>
-                    </div> */}
 
-                <InputText labelText="Nome" placeholder="Digite seu nome" />
+                {/* 
+export type PostModel = {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: string;
+    coverImageUrl: string;
+    published: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    author: string;
+}
+*/}
+                <InputText
+                    labelText="ID"
+                    name="id"
+                    placeholder="ID gerado automaticamente"
+                    type="text"
+                    defaultValue={''}
+                    readOnly
+                />
+
+                <InputText
+                    labelText="slug"
+                    name="slug"
+                    placeholder="slug gerado automaticamente"
+                    type="text"
+                    defaultValue={''}
+                    readOnly
+                />
+
+                <InputText
+                    labelText="Autor"
+                    name="author"
+                    placeholder="Digite o nome do autor"
+                    type="text"
+                    defaultValue={''}
+                />
+
+                <InputText
+                    labelText="Título"
+                    name="title"
+                    placeholder="Digite o título do post"
+                    type="text"
+                    defaultValue={''}
+                />
+
+                <InputText
+                    labelText="Excerto"
+                    name="excerpt"
+                    placeholder="Digite o resumo do post"
+                    type="text"
+                    defaultValue={''}
+                />
+
+                <MarkdownEditor
+                    labelText="Conteudo"
+                    value={contentValue}
+                    setValue={setContentValue}
+                    textAreaName="content"
+                    disabled={false}
+                />
+
+                <ImageUploader />
+
+                <InputText
+                    labelText="URL da imagem de capa"
+                    name="coverImageUrl"
+                    placeholder="Digite a URL da imagem"
+                    type="text"
+                    defaultValue={''}
+                />
+
+                <InputCheckBox
+                    labelText="Publicado"
+                    name="published"
+                    type="checkbox"
+                />
+
+                {/* <InputText labelText="Nome" placeholder="Digite seu nome" />
                 <InputText labelText="sobrenome" placeholder="Digite seu sobrenome" />
 
                 <ImageUploader />
 
                 <InputCheckBox labelText="sobrenome" />
 
-                <MarkdownEditor 
-                value={contentValue} 
-                setValue={setContentValue}
-                labelText="Conteudo" 
-                disabled={false} 
-                textAreaName="content" />
+                <MarkdownEditor
+                    value={contentValue}
+                    setValue={setContentValue}
+                    labelText="Conteudo"
+                    disabled={false}
+                    textAreaName="content"
+                />
 
                 <InputText defaultValue='ola mundo' labelText="sobrenome" placeholder="Digite seu sobrenome" disabled />
                 <InputText labelText="sobrenome" placeholder="Digite seu sobrenome" disabled />
-                <InputText labelText="sobrenome" placeholder="Digite seu sobrenome" defaultValue='ola mundo' readOnly />
+                <InputText labelText="sobrenome" placeholder="Digite seu sobrenome" defaultValue='ola mundo' readOnly /> */}
 
             </div>
 
