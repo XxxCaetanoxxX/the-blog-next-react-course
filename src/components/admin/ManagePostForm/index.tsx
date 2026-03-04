@@ -6,34 +6,25 @@ import { InputText } from "@/components/InputText";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 import { useState } from "react";
 import { ImageUploader } from "../ImageUploader";
+import { PublicPost } from "@/dto/post/dto";
 
-export function ManagePostForm() {
-    const [contentValue, setContentValue] = useState('');
+type MenagePostFormProps = {
+    publicPost?: PublicPost;
+}
+
+export function ManagePostForm({ publicPost }: MenagePostFormProps) {
+    const [contentValue, setContentValue] = useState(publicPost?.content || '');
 
     return (
         <form action='' className="mb-16">
             <div>
 
-                {/* 
-export type PostModel = {
-    id: string;
-    title: string;
-    slug: string;
-    excerpt: string;
-    content: string;
-    coverImageUrl: string;
-    published: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-    author: string;
-}
-*/}
                 <InputText
                     labelText="ID"
                     name="id"
                     placeholder="ID gerado automaticamente"
                     type="text"
-                    defaultValue={''}
+                    defaultValue={publicPost?.id || ''}
                     readOnly
                 />
 
@@ -42,7 +33,7 @@ export type PostModel = {
                     name="slug"
                     placeholder="slug gerado automaticamente"
                     type="text"
-                    defaultValue={''}
+                    defaultValue={publicPost?.slug || ''}
                     readOnly
                 />
 
@@ -51,7 +42,7 @@ export type PostModel = {
                     name="author"
                     placeholder="Digite o nome do autor"
                     type="text"
-                    defaultValue={''}
+                    defaultValue={publicPost?.author || ''}
                 />
 
                 <InputText
@@ -59,7 +50,7 @@ export type PostModel = {
                     name="title"
                     placeholder="Digite o título do post"
                     type="text"
-                    defaultValue={''}
+                    defaultValue={publicPost?.title || ''}
                 />
 
                 <InputText
@@ -67,7 +58,7 @@ export type PostModel = {
                     name="excerpt"
                     placeholder="Digite o resumo do post"
                     type="text"
-                    defaultValue={''}
+                    defaultValue={publicPost?.excerpt || ''}
                 />
 
                 <MarkdownEditor
@@ -85,13 +76,14 @@ export type PostModel = {
                     name="coverImageUrl"
                     placeholder="Digite a URL da imagem"
                     type="text"
-                    defaultValue={''}
+                    defaultValue={publicPost?.coverImageUrl || ''}
                 />
 
                 <InputCheckBox
                     labelText="Publicado"
                     name="published"
                     type="checkbox"
+                    defaultChecked={publicPost?.published || false}
                 />
 
                 {/* <InputText labelText="Nome" placeholder="Digite seu nome" />
