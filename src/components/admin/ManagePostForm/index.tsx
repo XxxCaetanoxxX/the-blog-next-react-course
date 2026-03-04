@@ -4,9 +4,10 @@ import { Button } from "@/components/Button";
 import { InputCheckBox } from "@/components/InputCheckBox";
 import { InputText } from "@/components/InputText";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { ImageUploader } from "../ImageUploader";
 import { PublicPost } from "@/dto/post/dto";
+import { createPostAction } from "@/actions/post/create-post-action";
 
 type MenagePostFormProps = {
     publicPost?: PublicPost;
@@ -14,9 +15,18 @@ type MenagePostFormProps = {
 
 export function ManagePostForm({ publicPost }: MenagePostFormProps) {
     const [contentValue, setContentValue] = useState(publicPost?.content || '');
+    const initialState = {
+        numero: 0,
+    }
+    //o que retornar na action, vira o novo estado
+    const [state, action, isPending] = useActionState(createPostAction, initialState);
+
+    useEffect(() => {
+        console.log('state', state.numero);
+    }, [state.numero]);
 
     return (
-        <form action='' className="mb-16">
+        <form action={action} className="mb-16">
             <div>
 
                 <InputText
