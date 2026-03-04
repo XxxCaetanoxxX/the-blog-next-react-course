@@ -21,6 +21,7 @@ export async function createPostAction(
     }
 
     const formDataToObject = Object.fromEntries(formData.entries());
+    console.log(formDataToObject);
 
     return {
         formState: prevState.formState,
