@@ -4,9 +4,9 @@ import { Button } from "@/components/Button";
 import { InputCheckBox } from "@/components/InputCheckBox";
 import { InputText } from "@/components/InputText";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { ImageUploader } from "../ImageUploader";
-import { PublicPost } from "@/dto/post/dto";
+import { makePartialPublicPost, PublicPost } from "@/dto/post/dto";
 import { createPostAction } from "@/actions/post/create-post-action";
 
 type MenagePostFormProps = {
@@ -14,16 +14,18 @@ type MenagePostFormProps = {
 }
 
 export function ManagePostForm({ publicPost }: MenagePostFormProps) {
-    const [contentValue, setContentValue] = useState(publicPost?.content || '');
     const initialState = {
-        numero: 0,
+        formState: makePartialPublicPost(publicPost),
+        errors: [],
     }
     //o que retornar na action, vira o novo estado
-    const [state, action, isPending] = useActionState(createPostAction, initialState);
+    const [state, action, isPending] = useActionState(
+        createPostAction,
+        initialState
+    );
 
-    useEffect(() => {
-        console.log('state', state.numero);
-    }, [state.numero]);
+    const { formState } = state;    
+    const [contentValue, setContentValue] = useState(publicPost?.content || '');
 
     return (
         <form action={action} className="mb-16">
@@ -34,7 +36,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="id"
                     placeholder="ID gerado automaticamente"
                     type="text"
-                    defaultValue={publicPost?.id || ''}
+                    defaultValue={formState.id}
                     readOnly
                 />
 
@@ -43,7 +45,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="slug"
                     placeholder="slug gerado automaticamente"
                     type="text"
-                    defaultValue={publicPost?.slug || ''}
+                    defaultValue={formState.slug}
                     readOnly
                 />
 
@@ -52,7 +54,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="author"
                     placeholder="Digite o nome do autor"
                     type="text"
-                    defaultValue={publicPost?.author || ''}
+                    defaultValue={formState.author}
                 />
 
                 <InputText
@@ -60,7 +62,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="title"
                     placeholder="Digite o título do post"
                     type="text"
-                    defaultValue={publicPost?.title || ''}
+                    defaultValue={formState.title}
                 />
 
                 <InputText
@@ -68,7 +70,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="excerpt"
                     placeholder="Digite o resumo do post"
                     type="text"
-                    defaultValue={publicPost?.excerpt || ''}
+                    defaultValue={formState.excerpt}
                 />
 
                 <MarkdownEditor
@@ -86,14 +88,14 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="coverImageUrl"
                     placeholder="Digite a URL da imagem"
                     type="text"
-                    defaultValue={publicPost?.coverImageUrl || ''}
+                    defaultValue={formState.coverImageUrl}
                 />
 
                 <InputCheckBox
                     labelText="Publicado"
                     name="published"
                     type="checkbox"
-                    defaultChecked={publicPost?.published || false}
+                    defaultChecked={formState.published}
                 />
 
                 {/* <InputText labelText="Nome" placeholder="Digite seu nome" />
