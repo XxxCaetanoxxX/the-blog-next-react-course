@@ -8,7 +8,11 @@ import { ImageUpIcon } from "lucide-react";
 import { useRef, useState, useTransition } from "react";
 import { toast } from "react-toastify";
 
-export function ImageUploader() {
+type ImageProsps = {
+    disabled?: boolean
+}
+
+export function ImageUploader({ disabled = false }: ImageProsps) {
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [isUploading, startTransition] = useTransition();
     const [imgUrl, setImgUrl] = useState('');
@@ -71,7 +75,7 @@ export function ImageUploader() {
                 onClick={handleChooseFile}
                 type="button"
                 className="self-start bg-blue-500 px-4 py-2 rounded-lg text-white flex flex-row gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                disabled={isUploading}>
+                disabled={isUploading || disabled}>
                 <ImageUpIcon />
                 Enviar uma imagem
             </Button>
@@ -94,7 +98,7 @@ export function ImageUploader() {
                 name="file"
                 type="file"
                 accept="image/*"
-                disabled={isUploading}
+                disabled={isUploading || disabled}
             />
         </div>
     )

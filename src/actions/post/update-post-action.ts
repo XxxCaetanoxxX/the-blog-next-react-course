@@ -1,27 +1,25 @@
 'use server';
 
-import { PostCreateSchema } from "@/lib/post/validations";
-import { makePartialPublicPost, PublicPost } from "@/dto/post/dto";
+import { PostUpdateSchema } from "@/lib/post/validations";
+import { makePartialPublicPost, makePublicPostFromDb, PublicPost } from "@/dto/post/dto";
 import { getZodErrorMessages } from "@/utils/get-zod-error-messages";
 import { PostModel } from "@/modelos/post/post-model";
 import { v4 as uuidV4 } from 'uuid';
 import { makeSlugFromText } from "@/utils/make-slug-from-text";
-import { drizzleDb } from "@/db/drizzle";
-import { postsTable } from "@/db/drizzle/schemas";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { postRepository } from "@/repositories/post";
 
-type CreatePostActionState = {
+type UpdatePostActionState = {
     formState: PublicPost;
     errors: string[];
     success?: true;
 };
 
-export async function createPostAction(
-    prevState: CreatePostActionState,
+export async function updatePostAction(
+    prevState: UpdatePostActionState,
     formData: FormData
-): Promise<CreatePostActionState> {
+): Promise<UpdatePostActionState> {
     //TODO: verificar se usuario esta logado
 
     if (!(formData instanceof FormData)) {
@@ -31,9 +29,18 @@ export async function createPostAction(
         }
     }
 
+    const id=formData.get('id')?.toString();
+
+    if (!id || typeof id !== 'string') {
+        return {
+            formState: prevState.formState,
+            errors: ['ID inválidos.'],
+        }
+    }
+
     const formDataToObject = Object.fromEntries(formData.entries());
 
-    const zodParsedObject = PostCreateSchema.safeParse(formDataToObject);
+    const zodParsedObject = PostUpdateSchema.safeParse(formDataToObject);
 
     if (!zodParsedObject.success) {
         const errors = getZodErrorMessages(zodParsedObject.error.format());
@@ -44,30 +51,32 @@ export async function createPostAction(
     }
 
     const validPostData = zodParsedObject.data;
-    const newPost: PostModel = {
+    const newPost = {
         ...validPostData,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        id: uuidV4(),
-        slug: makeSlugFromText(validPostData.title),
     }
 
+    let post;
     try {
-        await postRepository.create(newPost);
+        post = await postRepository.update(id,newPost);
     } catch (e: unknown) {
         if (e instanceof Error) {
             return {
                 errors: [e.message],
-                formState: newPost
+                formState:  makePartialPublicPost(formDataToObject),
             }
         }
 
-        return {
+        return{
             errors: ['Erro Desconhecido.'],
-            formState: newPost
+            formState:  makePartialPublicPost(formDataToObject),
         }
     }
 
     revalidatePath('/posts');
-    redirect(`/admin/post/${newPost.id}`);
+
+    return{
+        formState: makePublicPostFromDb(post),
+        errors: [],
+        success: true,
+    }
 }

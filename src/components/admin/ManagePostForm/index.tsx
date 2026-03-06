@@ -9,19 +9,41 @@ import { ImageUploader } from "../ImageUploader";
 import { makePartialPublicPost, PublicPost } from "@/dto/post/dto";
 import { createPostAction } from "@/actions/post/create-post-action";
 import { toast } from "react-toastify";
+import { updatePostAction } from "@/actions/post/update-post-action";
+import { create } from "domain";
 
-type MenagePostFormProps = {
+type MenagePostUpdateFormProps = {
+    mode: 'update'
     publicPost?: PublicPost;
 }
 
-export function ManagePostForm({ publicPost }: MenagePostFormProps) {
+type MenagePostFormCreateProps = {
+    mode: 'create'
+    publicPost?: PublicPost;
+}
+
+type MenagePostFormProps = MenagePostUpdateFormProps | MenagePostFormCreateProps
+
+export function ManagePostForm(props: MenagePostFormProps) {
+    const { mode } = props;
+
+    let publicPost;
+    if (mode === 'update') {
+        publicPost = props.publicPost;
+    }
+
+    const actionsMap = {
+        update: updatePostAction,
+        create: createPostAction
+    }
+
     const initialState = {
         formState: makePartialPublicPost(publicPost),
         errors: [],
     }
     //o que retornar na action, vira o novo estado
     const [state, action, isPending] = useActionState(
-        createPostAction,
+        actionsMap[mode],
         initialState
     );
 
@@ -31,6 +53,13 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
             state.errors.forEach((error) => toast.error(error));
         }
     }, [state.errors]);
+
+    useEffect(() => {
+        if (state.success) {
+            toast.dismiss();
+            toast.success("Post atualziado com sucesso!");
+        }
+    }, [state.success]);
 
     const { formState } = state;
     const [contentValue, setContentValue] = useState(publicPost?.content || '');
@@ -45,6 +74,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     placeholder="ID gerado automaticamente"
                     type="text"
                     defaultValue={formState.id}
+                    disabled={isPending}
                     readOnly
                 />
 
@@ -54,6 +84,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     placeholder="slug gerado automaticamente"
                     type="text"
                     defaultValue={formState.slug}
+                    disabled={isPending}
                     readOnly
                 />
 
@@ -62,6 +93,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="author"
                     placeholder="Digite o nome do autor"
                     type="text"
+                    disabled={isPending}
                     defaultValue={formState.author}
                 />
 
@@ -70,6 +102,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="title"
                     placeholder="Digite o título do post"
                     type="text"
+                    disabled={isPending}
                     defaultValue={formState.title}
                 />
 
@@ -78,6 +111,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="excerpt"
                     placeholder="Digite o resumo do post"
                     type="text"
+                    disabled={isPending}
                     defaultValue={formState.excerpt}
                 />
 
@@ -86,7 +120,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     value={contentValue}
                     setValue={setContentValue}
                     textAreaName="content"
-                    disabled={false}
+                    disabled={isPending}
                 />
 
                 <ImageUploader />
@@ -96,6 +130,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     name="coverImageUrl"
                     placeholder="Digite a URL da imagem"
                     type="text"
+                    disabled={isPending}
                     defaultValue={formState.coverImageUrl}
                 />
 
@@ -103,6 +138,7 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
                     labelText="Publicado"
                     name="published"
                     type="checkbox"
+                    disabled={isPending}
                     defaultChecked={formState.published}
                 />
 
@@ -128,7 +164,12 @@ export function ManagePostForm({ publicPost }: MenagePostFormProps) {
             </div>
 
             <div className="mt-4">
-                <Button size="lg" className="w-full bg-blue-600 rounded py-3 text-white" type="submit">Enviar</Button>
+                <Button
+                    size="lg"
+                    className="w-full bg-blue-600 rounded py-3 text-white"
+                    type="submit">
+                    Enviar
+                </Button>
             </div>
         </form>
     )
