@@ -11,11 +11,12 @@ import { postsTable } from "@/db/drizzle/schemas";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { postRepository } from "@/repositories/post";
+import { asyncDelay } from "@/utils/async-delay";
 
 type CreatePostActionState = {
     formState: PublicPost;
     errors: string[];
-    success?: true;
+    success?: string;
 };
 
 export async function createPostAction(
@@ -23,6 +24,8 @@ export async function createPostAction(
     formData: FormData
 ): Promise<CreatePostActionState> {
     //TODO: verificar se usuario esta logado
+
+    await asyncDelay(3000, true);
 
     if (!(formData instanceof FormData)) {
         return {
@@ -69,5 +72,5 @@ export async function createPostAction(
     }
 
     revalidatePath('/posts');
-    redirect(`/admin/post/${newPost.id}`);
+    redirect(`/admin/post/${newPost.id}?created=1`);
 }

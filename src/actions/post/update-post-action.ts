@@ -9,11 +9,13 @@ import { makeSlugFromText } from "@/utils/make-slug-from-text";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { postRepository } from "@/repositories/post";
+import { asyncDelay } from "@/utils/async-delay";
+import { makeRandomString } from "@/utils/make-random-string";
 
 type UpdatePostActionState = {
     formState: PublicPost;
     errors: string[];
-    success?: true;
+    success?: string;
 };
 
 export async function updatePostAction(
@@ -22,6 +24,9 @@ export async function updatePostAction(
 ): Promise<UpdatePostActionState> {
     //TODO: verificar se usuario esta logado
 
+    await asyncDelay(3000, true);
+
+
     if (!(formData instanceof FormData)) {
         return {
             formState: prevState.formState,
@@ -29,7 +34,7 @@ export async function updatePostAction(
         }
     }
 
-    const id=formData.get('id')?.toString();
+    const id = formData.get('id')?.toString();
 
     if (!id || typeof id !== 'string') {
         return {
@@ -57,26 +62,26 @@ export async function updatePostAction(
 
     let post;
     try {
-        post = await postRepository.update(id,newPost);
+        post = await postRepository.update(id, newPost);
     } catch (e: unknown) {
         if (e instanceof Error) {
             return {
                 errors: [e.message],
-                formState:  makePartialPublicPost(formDataToObject),
+                formState: makePartialPublicPost(formDataToObject),
             }
         }
 
-        return{
+        return {
             errors: ['Erro Desconhecido.'],
-            formState:  makePartialPublicPost(formDataToObject),
+            formState: makePartialPublicPost(formDataToObject),
         }
     }
 
     revalidatePath('/posts');
 
-    return{
+    return {
         formState: makePublicPostFromDb(post),
         errors: [],
-        success: true,
+        success: makeRandomString(),
     }
 }
