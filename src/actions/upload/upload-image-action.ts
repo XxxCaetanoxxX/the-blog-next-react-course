@@ -1,8 +1,7 @@
 'use server';
 
-import { IMAGE_SERVER_URL, IMAGE_UPLOAD_DIRECTORY, IMAGE_UPLOAD_MAX_SIZE } from "@/lib/constants";
 import { asyncDelay } from "@/utils/async-delay";
-import { mkdir, writeFile, writeFileSync } from "fs";
+import { mkdir, writeFileSync } from "fs";
 import { resolve } from "path";
 import { extname } from "path/win32";
 
@@ -10,6 +9,9 @@ type UploadImageActionResult = {
     url: string;
     error: string;
 }
+const uploadDir = process.env.IMAGE_UPLOAD_DIRECTORY || 'uploads';
+const IMAGE_UPLOAD_MAX_SIZE = Number(process.env.NEXT_PUBLIC_IMAGE_UPLOAD_MAX_SIZE) || 921600;
+const imageServerUrl = process.env.IMAGE_SERVER_URL || 'http://localhost:3000/uploads';
 
 export async function uploadImageAction(formData: FormData): Promise<UploadImageActionResult> {
     // TODO: remover delay
@@ -38,8 +40,7 @@ export async function uploadImageAction(formData: FormData): Promise<UploadImage
     const imageExtension = extname(file.name);
     const uniqueImageName = `${Date.now()}${imageExtension}`;
 
-    const uploadFullPath = resolve(process.cwd(), 'public', IMAGE_UPLOAD_DIRECTORY);
-    console.log(uploadFullPath);
+    const uploadFullPath = resolve(process.cwd(), 'public', uploadDir);
     await mkdir(uploadFullPath, { recursive: true }, (err) => {
         if (err) {
             console.error('Erro ao criar diretório de upload:', err);
@@ -53,7 +54,7 @@ export async function uploadImageAction(formData: FormData): Promise<UploadImage
     const fileFullPath = resolve(uploadFullPath, uniqueImageName);
     await writeFileSync(fileFullPath, buffer);
 
-    const url = `${IMAGE_SERVER_URL}/${uniqueImageName}`;
+    const url = `${imageServerUrl}/${uniqueImageName}`;
 
     return makeResult({ url });
 
