@@ -12,6 +12,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { postRepository } from "@/repositories/post";
 import { asyncDelay } from "@/utils/async-delay";
+import { verifyLoginSession } from "@/lib/login/manage-login";
 
 type CreatePostActionState = {
     formState: PublicPost;
@@ -23,7 +24,7 @@ export async function createPostAction(
     prevState: CreatePostActionState,
     formData: FormData
 ): Promise<CreatePostActionState> {
-    //TODO: verificar se usuario esta logado
+    const isAuthenticated = await verifyLoginSession();
 
     await asyncDelay(3000, true);
 
@@ -35,8 +36,14 @@ export async function createPostAction(
     }
 
     const formDataToObject = Object.fromEntries(formData.entries());
-
     const zodParsedObject = PostCreateSchema.safeParse(formDataToObject);
+
+    if (!isAuthenticated) {
+        return {
+            formState: makePartialPublicPost(formDataToObject),
+            errors: ['Faça login em outra aba antes de salvar.'],
+        }
+    }
 
     if (!zodParsedObject.success) {
         const errors = getZodErrorMessages(zodParsedObject.error.format());

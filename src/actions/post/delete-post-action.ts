@@ -1,11 +1,20 @@
 'use server';
 
+import { verifyLoginSession } from "@/lib/login/manage-login";
 import { postRepository } from "@/repositories/post";
 import { asyncDelay } from "@/utils/async-delay";
 import { revalidatePath } from "next/cache";
 
 export async function deletePostAction(id: string) {
-    //TODO: CHECAR LOGIN 
+    const isAuthenticated = await verifyLoginSession();
+
+    if (!isAuthenticated) {
+        return {
+            error: 'Faça login novamente em outra aba.'
+        }
+    }
+
+
     await asyncDelay(2000);
 
     if (!id || typeof id !== 'string') {

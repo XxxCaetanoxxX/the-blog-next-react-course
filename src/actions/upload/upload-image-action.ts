@@ -1,5 +1,6 @@
 'use server';
 
+import { verifyLoginSession } from "@/lib/login/manage-login";
 import { asyncDelay } from "@/utils/async-delay";
 import { mkdir, writeFileSync } from "fs";
 import { resolve } from "path";
@@ -14,11 +15,17 @@ const IMAGE_UPLOAD_MAX_SIZE = Number(process.env.NEXT_PUBLIC_IMAGE_UPLOAD_MAX_SI
 const imageServerUrl = process.env.IMAGE_SERVER_URL || 'http://localhost:3000/uploads';
 
 export async function uploadImageAction(formData: FormData): Promise<UploadImageActionResult> {
-    // TODO: remover delay
+    const makeResult = ({ url = '', error = '' }) => ({ url, error });
+
+    const isAuthenticated = await verifyLoginSession();
+
+    if (!isAuthenticated) {
+        return makeResult({ error: 'Faça login novamente em outra aba.' });
+    }
+
     await asyncDelay(5000, true);
 
 
-    const makeResult = ({ url = '', error = '' }) => ({ url, error });
 
     if (!(formData instanceof FormData)) {
         return makeResult({ error: 'Dados de formulário inválidos.' });
